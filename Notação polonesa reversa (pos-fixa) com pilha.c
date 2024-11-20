@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <math.h>
 #include <string.h>
 
 struct stackNode {
-    float data;                 // Armazena n˙meros em ponto flutuante
-    struct stackNode *nextPtr;  // Ponteiro para o prÛximo nÛ
+    float data;                 // Armazena n√∫meros em ponto flutuante
+    struct stackNode *nextPtr;  // Ponteiro para o pr√≥ximo n√≥
 };
 
 typedef struct stackNode STACKNODE;
@@ -21,7 +22,7 @@ float evaluateRPN(char *expression);
 int main() {
     char expression[100];
 
-    printf("Digite uma express„o em notaÁ„o pÛs-fixada (ex: 5 3 + 2 *):\n");
+    printf("Digite uma expressao em nota√ß√£o pos-fixada (ex: 5 3 + 2 *):\n");
     fgets(expression, sizeof(expression), stdin);
 
     // Remover o caractere de nova linha, se existir
@@ -29,7 +30,7 @@ int main() {
 
     float result = evaluateRPN(expression);
 
-    printf("O resultado da express„o È: %.2f\n", result);
+    printf("O resultado da express√£o : %.2f\n", result);
 
     return 0;
 }
@@ -43,7 +44,7 @@ void push(STACKNODEPTR *topPtr, float value) {
         newPtr->nextPtr = *topPtr;
         *topPtr = newPtr;
     } else {
-        printf("Erro: MemÛria insuficiente para inserir %.2f.\n", value);
+        printf("Erro: Mem√≥ria insuficiente para inserir %.2f.\n", value);
         exit(EXIT_FAILURE);
     }
 }
@@ -63,28 +64,27 @@ float pop(STACKNODEPTR *topPtr) {
     return popValue;
 }
 
-/* Verifica se a pilha est· vazia */
+/* Verifica se a pilha est√° vazia */
 int isEmpty(STACKNODEPTR topPtr) {
     return topPtr == NULL;
 }
 
-/* Avalia uma express„o em notaÁ„o pÛs-fixada usando pilha */
+/* Avalia uma express√£o em nota√ß√£o p√≥s-fixada usando pilha */
 float evaluateRPN(char *expression) {
     STACKNODEPTR stack = NULL;
-    char *token = strtok(expression, " ");  // Divide a string por espaÁos
+    char *token = strtok(expression, " ");  // Divide a string por espa√ßos
 
     while (token != NULL) {
         if (isdigit(token[0]) || (token[0] == '-' && isdigit(token[1]))) {
-            // Token È um n˙mero (positivo ou negativo)
+            // Token √© um n√∫mero (positivo ou negativo)
             float value = atof(token);
             push(&stack, value);
-        } else if (strchr("+-*/", token[0]) && strlen(token) == 1) {
-            // Token È um operador (+, -, *, /)
+        } else if (strchr("+-*/^", token[0]) && strlen(token) == 1) {
+            // Token √© um operador (+, -, *, /,^,seno,cosseno,tangente,raiz quadrada,logaritmo - por serem letras provavelmente tem que usar string compare)
             if (stack == NULL || stack->nextPtr == NULL) {
-                printf("Erro: Express„o inv·lida.\n");
+                printf("Erro: Express√£o inv√°lida.\n");
                 exit(EXIT_FAILURE);
             }
-
             float operand2 = pop(&stack);
             float operand1 = pop(&stack);
             float result;
@@ -101,29 +101,31 @@ float evaluateRPN(char *expression) {
                     break;
                 case '/':
                     if (operand2 == 0) {
-                        printf("Erro: Divis„o por zero.\n");
+                        printf("Erro: Divis√£o por zero.\n");
                         exit(EXIT_FAILURE);
                     }
                     result = operand1 / operand2;
                     break;
+                case '^':
+				    result = pow(operand1,operand2);
+					break;			    
                 default:
-                    printf("Erro: Operador inv·lido '%s'.\n", token);
+                    printf("Erro: Operador inv√°lido '%s'.\n", token);
                     exit(EXIT_FAILURE);
             }
 
             push(&stack, result);
         } else {
-            printf("Erro: Token inv·lido '%s'.\n", token);
+            printf("Erro: Token inv√°lido '%s'.\n", token);
             exit(EXIT_FAILURE);
         }
-
-        token = strtok(NULL, " ");  // PrÛximo token
+        token = strtok(NULL, " ");  // Pr√≥ximo token
     }
 
     if (stack == NULL || stack->nextPtr != NULL) {
-        printf("Erro: Express„o mal formada.\n");
+        printf("Erro: Express√£o mal formada.\n");
         exit(EXIT_FAILURE);
     }
-
     return pop(&stack);  // O resultado final
-}
+    
+}//Fim da fun√ß√£o das opera√ß√µes
