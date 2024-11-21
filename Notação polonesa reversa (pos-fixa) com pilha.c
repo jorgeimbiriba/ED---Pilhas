@@ -86,9 +86,9 @@ float evaluateRPN(char *expression) {
         } else if (strchr("+-*/^", token[0]) && strlen(token) == 1) {
             // Token é um operador de um caractere
             basicOperator(token, &stack);
-        } else if (strcmp(token, "sin") == 0 || strcmp(token, "cos") == 0 ||
-                   strcmp(token, "tan") == 0 || strcmp(token, "sqrt") == 0 ||
-                   strcmp(token, "log") == 0) {
+        } else if (strcmp(token, "s") == 0 || strcmp(token, "c") == 0 ||
+                   strcmp(token, "t") == 0 || strcmp(token, "r") == 0 ||
+                   strcmp(token, "l") == 0) {
             // Token é uma função matemática
             calcFunction(token, &stack);
         } else {
@@ -180,19 +180,19 @@ void calcFunction(char *token, STACKNODEPTR *stack) {
     float operand = pop(stack);
     float result;
 
-    if (strcmp(token, "sin") == 0) {
+    if (strcmp(token, "s") == 0) {
         result = sin(operand);
-    } else if (strcmp(token, "cos") == 0) {
+    } else if (strcmp(token, "c") == 0) {
         result = cos(operand);
-    } else if (strcmp(token, "tan") == 0) {
+    } else if (strcmp(token, "t") == 0) {
         result = tan(operand);
-    } else if (strcmp(token, "sqrt") == 0) {
+    } else if (strcmp(token, "r") == 0) {
         if (operand < 0) {
             printf("Erro: Raiz quadrada de número negativo.\n");
             exit(EXIT_FAILURE);
         }
         result = sqrt(operand);
-    } else if (strcmp(token, "log") == 0) {
+    } else if (strcmp(token, "l") == 0) {
         if (operand <= 0) {
             printf("Erro: Logaritmo de valor não positivo.\n");
             exit(EXIT_FAILURE);
