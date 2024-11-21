@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -40,7 +41,7 @@ int main() {
     return 0;
 }
 
-// Avalia uma expressão em notação pós-fixada usando pilha
+// Função para avaliar uma expressão em notação pós-fixada
 float evaluateRPN(char *expression) {
     STACKNODEPTR stack = NULL; // Inicializa a pilha
     char *token = strtok(expression, " "); // Divide a string por espaços
@@ -62,7 +63,6 @@ float evaluateRPN(char *expression) {
             printf("Erro: Token inválido '%s'.\n", token);
             exit(EXIT_FAILURE);
         }
-
         token = strtok(NULL, " "); // Próximo token
     }
 
@@ -70,7 +70,6 @@ float evaluateRPN(char *expression) {
         printf("Erro: Expressão mal formada.\n");
         exit(EXIT_FAILURE);
     }
-
     return pop(&stack); // Retorna o resultado final
 }
 
@@ -88,7 +87,7 @@ void push(STACKNODEPTR *topPtr, float value) {
     }
 }
 
-// Manipula valor do topo da pilha
+// Remove e retorna o valor do topo da pilha
 float pop(STACKNODEPTR *topPtr) {
     if (isEmpty(*topPtr)) {
         printf("Erro: Tentativa de pop em uma pilha vazia.\n");
@@ -103,12 +102,12 @@ float pop(STACKNODEPTR *topPtr) {
     return popValue;
 }
 
-//Verifica se a pilha está vazia
+// Verifica se a pilha está vazia
 int isEmpty(STACKNODEPTR topPtr) {
     return topPtr == NULL;
 }
 
-// Função para as operadores básicas
+// Função para tratar operadores básicos e potência
 void basicOperator(char *token, STACKNODEPTR *stack) {
     float operand2 = pop(stack);
     float operand1 = pop(stack);
@@ -138,11 +137,10 @@ void basicOperator(char *token, STACKNODEPTR *stack) {
             printf("Erro: Operador inválido '%s'.\n", token);
             exit(EXIT_FAILURE);
     }
-
     push(stack, result);
 }
 
-// Função para as funções matemáticas
+// Função para tratar funções matemáticas
 void calcFunction(char *token, STACKNODEPTR *stack) {
     float operand = pop(stack);
     float result;
