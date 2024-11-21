@@ -1,36 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <math.h>
-#include <string.h>
-
-struct stackNode {
-    float data;                 // Armazena números em ponto flutuante
-    struct stackNode *nextPtr;  // Ponteiro para o próximo nó
-};
-
-typedef struct stackNode STACKNODE;
-typedef STACKNODE *STACKNODEPTR;
-
-// Prototipos
-void push(STACKNODEPTR *topPtr, float value);
-float pop(STACKNODEPTR *topPtr);
-int isEmpty(STACKNODEPTR topPtr);
-void instructions(void);
-float evaluateRPN(char *expression);
-
-int main() {
-    char expression[100];
-
-    printf("Digite uma expressao em notação pos-fixada (ex: 5 3 + 2 *):\n");
-    fgets(expression, sizeof(expression), stdin);
-
-    // Remover o caractere de nova linha, se existir
-    expression[strcspn(expression, "\n")] = '\0';
-
-    float result = evaluateRPN(expression);
-
-    printf("O resultado da expressão : %#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
